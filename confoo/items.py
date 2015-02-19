@@ -29,3 +29,4 @@ class SpeakerItem(scrapy.Item):
     speaker_photo = scrapy.Field()
     twitter = scrapy.Field()
     company_url = scrapy.Field()
+    talks = scrapy.Field()

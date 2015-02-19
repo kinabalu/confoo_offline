@@ -1,0 +1,23 @@
+<p class="lead">
+Click any of the sections below to edit for the property
+
+<h3>Filter</h3>
+<button class='btn btn-default' ng-click="filterDate('February 18, 2015')">February 18, 2015</button>
+<button class='btn btn-default' ng-click="filterDate('February 19, 2015')">February 19, 2015</button>
+<button class='btn btn-default' ng-click="filterDate('February 20, 2015')">February 20, 2015</button>
+<button class='btn btn-default' ng-click="filterDate()">Clear</button>
+</p>
+<hr />
+
+<div class="list-group" ng-repeat="col in talks" ng-show="talks">
+  <a ui-sref="talk({talkID: col.id})" class="list-group-item">
+    <h4 class="list-group-item-heading">{{ col.title }}</h4>
+    <small class="list-group-item-text">
+      <strong>Date:</strong> {{ col.date }} - {{ col.time }}<br />
+      <strong>Speaker:</strong> {{ col.speaker.name }}
+    </small>
+  </a> 
+</div>
+<p ng-hide="talks">
+  No matching talks found
+</p>

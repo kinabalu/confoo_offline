@@ -22,12 +22,12 @@ def process_talks():
         if talk is None:
             talk = dict()
 
-        new_entry = {
-            "title": entry['title'][0],
-            "url": entry['url'][0],
-            "session_id": entry['id'][0],
-        }
-        db.talks.save(new_entry)
+        talk['title'] = entry['title'][0]
+        talk['session_id'] = entry['id'][0]
+        talk['url'] = entry['url'][0]
+        talk['speaker_url'] = entry['speaker_url'][0]
+
+        db.talks.save(talk)
 
     json_data.close()
 
@@ -54,9 +54,9 @@ def process_speakers():
     data = json.load(json_data)
 
     for entry in data:
-        speaker = db.speakers.find_one({"url": entry['url']})        
+        speaker = db.speakers.find_one({"url": entry['url']}) 
         if speaker is None:
-            speaker = dict()        
+            speaker = dict() 
 
         speaker['url'] = entry['url']
         speaker['name'] = entry['name'][0]
@@ -68,7 +68,18 @@ def process_speakers():
         if len(entry['twitter']) > 0:
             speaker['twitter'] = entry['twitter'][0]
 
-        db.speakers.save(speaker)
+        oid = db.speakers.save(speaker)
+
+        if 'talks' not in speaker:
+            speaker['talks'] = []
+            for talk_url in entry['talks']:
+                talk = db.talks.find_one({"url": talk_url})
+                if talk is None:
+                    continue
+                talk['_speaker_id'] = oid
+                speaker['talks'].append(talk['_id'])
+                db.talks.save(talk)
+            db.speakers.save(speaker)
 
     json_data.close()
 
