@@ -1,0 +1,4 @@
+*.pyc
+speakers.json
+talk_details.json
+talks.json
